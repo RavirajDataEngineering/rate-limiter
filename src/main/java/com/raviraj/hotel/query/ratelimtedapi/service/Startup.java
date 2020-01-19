@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.raviraj.hotel.query.ratelimitedapi.dao.InMemoryDatabase;
+import com.raviraj.hotel.query.ratelimitedapi.exceptions.ValidationException;
 
 
 
@@ -16,7 +17,9 @@ public class Startup {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Startup.class);
 	
 	public static void main(String[] args) {
-
+		if(args.length<2) {
+			throw new ValidationException("Please give the arguments for config file and hoteldb.csv");
+		}
 		Server server = new Server(4444);
 
 		ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
