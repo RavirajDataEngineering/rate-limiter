@@ -44,7 +44,13 @@ public class RateLimiterBuilder {
 				else if(configs[0].equals("API")){
 					String[] apiParams = configs[1].split(",");
 					validateAPIParams(apiParams);
-					API api = new API(apiParams[0], new APILimit(Integer.parseInt(apiParams[1]),Integer.parseInt(apiParams[2])));
+					API api = null;
+					if(apiParams.length==3) {
+					 api = new API(apiParams[0], new APILimit(Integer.parseInt(apiParams[1]),Integer.parseInt(apiParams[2])));
+					}
+					else {
+						api = new API(apiParams[0], new APILimit(10,50));
+					}
 					apis.add(api);
 				}else {
 					throw new ValidationException("Invalid Config parameter in Ratelimter Config");
@@ -76,14 +82,17 @@ public class RateLimiterBuilder {
 	}
 	
 	private static void validateAPIParams(String[] apiParams) {
-		if(apiParams.length<3) {
-			throw new ValidationException("Inavlid input for config params ");
+		if (apiParams.length == 3) {
+
+			if (!isNumeric(apiParams[1])) {
+				throw new ValidationException("Invaid value for window time in config");
+			}
+			if (!isNumeric(apiParams[2])) {
+				throw new ValidationException("Invaid value for API limit time in config");
+			}
 		}
-		if(!isNumeric(apiParams[1])) {
-			throw new ValidationException("Invaid value for window time in config");
-		}
-		if(!isNumeric(apiParams[2])) {
-			throw new ValidationException("Invaid value for API limit time in config");
+		if(apiParams.length<1) {
+			throw new ValidationException("API name required");
 		}
 	}
 	

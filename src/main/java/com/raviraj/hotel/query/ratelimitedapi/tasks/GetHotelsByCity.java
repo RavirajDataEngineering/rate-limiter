@@ -30,6 +30,8 @@ public class GetHotelsByCity implements APITask{
 	public ResponseObject execute(RequestObject req) {
 		
 		List<Hotel> hotels = dbManager.getHotelsByCity((City)req.get("city"));
+		if(hotels==null)
+			hotels = new ArrayList<Hotel>();
 		List<Room> rooms = new ArrayList<Room>();
 		for(Hotel h:hotels) {
 			rooms.addAll(h.getRooms());
